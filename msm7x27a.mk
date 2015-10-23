@@ -64,6 +64,8 @@ PRODUCT_PACKAGES += \
 #    libqcomfm_jni \
 #    qcom.fmradio
 
+PRODUCT_PACKAGES +=  libstlport
+
 #wifi
 PRODUCT_PACKAGES += \
     libwpa_client \
