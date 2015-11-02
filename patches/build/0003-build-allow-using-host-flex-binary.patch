@@ -1,0 +1,35 @@
+From 5fac1f0e00d76c48bf710d92a19886a7e9043b9a Mon Sep 17 00:00:00 2001
+From: Kyle Harrison <khwebmail@gmail.com>
+Date: Thu, 8 Oct 2015 12:05:00 +0100
+Subject: [PATCH] build: allow using host flex binary
+
+* Prebuilt flex doesn't work on newer glibc flex-2.5.39: loadlocale.c:131:
+_nl_intern_locale_data: Assertion `cnt < (sizeof (_nl_value_type_LC_COLLATE) / sizeof (_nl_value_type_LC_COLLATE[0]))' failed.
+* Enable with USE_HOST_LEX=yes
+
+Change-Id: Ie589e421fbed1663f2d41dd62edcbf5ab26895e6
+---
+ core/config.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/core/config.mk b/core/config.mk
+index 04c6d54..877a597 100644
+--- a/core/config.mk
++++ b/core/config.mk
+@@ -388,7 +388,12 @@ JACK_LAUNCHER_JAR := $(HOST_OUT_JAVA_LIBRARIES)/jack-launcher.jar
+ JILL_JAR := $(HOST_OUT_JAVA_LIBRARIES)/jill.jar
+ JACK_MULTIDEX_DEFAULT_PREPROCESSOR := frameworks/multidex/library/resources/JACK-INF/legacyMultidexInstallation.jpp
+ 
+-LEX := prebuilts/misc/$(BUILD_OS)-$(HOST_PREBUILT_ARCH)/flex/flex-2.5.39
++ifeq ($(USE_HOST_LEX),yes)
++    LEX := flex
++else
++    LEX := prebuilts/misc/$(BUILD_OS)-$(HOST_PREBUILT_ARCH)/flex/flex-2.5.39
++endif
++
+ # The default PKGDATADIR built in the prebuilt bison is a relative path
+ # external/bison/data.
+ # To run bison from elsewhere you need to set up enviromental variable
+-- 
+2.6.0
+

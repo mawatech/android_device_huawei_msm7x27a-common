@@ -1,0 +1,27 @@
+From 6eda48d3312c6fa9f100247c2f7b372806cffc90 Mon Sep 17 00:00:00 2001
+From: Kyle Harrison <khwebmail@gmail.com>
+Date: Fri, 16 Oct 2015 18:28:05 +0100
+Subject: [PATCH] Add path for wifi firmware
+
+Change-Id: Ie29523c78fd4f98ac39d5c978657f42cb1064764
+---
+ init/devices.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/init/devices.cpp b/init/devices.cpp
+index 9151f06..9d6aebc 100644
+--- a/init/devices.cpp
++++ b/init/devices.cpp
+@@ -52,7 +52,8 @@
+ #define SYSFS_PREFIX    "/sys"
+ static const char *firmware_dirs[] = { "/etc/firmware",
+                                        "/vendor/firmware",
+-                                       "/firmware/image" };
++                                       "/system/wifi",
++                                       "/data/misc/wifi" };
+ 
+ extern struct selabel_handle *sehandle;
+ 
+-- 
+2.6.1
+

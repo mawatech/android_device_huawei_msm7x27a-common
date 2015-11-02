@@ -1,0 +1,37 @@
+From 36963cee3dd2f851c66a0768b8cc9ab2d2bd1aff Mon Sep 17 00:00:00 2001
+From: Kyle Harrison <khwebmail@gmail.com>
+Date: Mon, 2 Nov 2015 21:12:54 +0000
+Subject: [PATCH] Add cortex-a5 support
+
+Change-Id: I06c2a7b6004670382252c9822ac0635a5c545c5e
+---
+ core/combo/arch/arm/armv7-a-neon.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/core/combo/arch/arm/armv7-a-neon.mk b/core/combo/arch/arm/armv7-a-neon.mk
+index 2822624..26de79c 100644
+--- a/core/combo/arch/arm/armv7-a-neon.mk
++++ b/core/combo/arch/arm/armv7-a-neon.mk
+@@ -32,6 +32,11 @@ ifeq ($(strip $(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)),cortex-a7)
+ 	arch_variant_ldflags := \
+ 		-Wl,--no-fix-cortex-a8
+ else
++ifeq ($(strip $(TARGET_$(combo_2nd_arch_prefix)CPU_VARIANT)),cortex-a5)
++	arch_variant_cflags := -mcpu=cortex-a5 -mfpu=neon-vfpv4
++	arch_variant_ldflags := \
++		-Wl,--no-fix-cortex-a8
++else
+ 	arch_variant_cflags := -march=armv7-a
+ 	# Generic ARM might be a Cortex A8 -- better safe than sorry
+ 	arch_variant_ldflags := \
+@@ -40,6 +45,7 @@ endif
+ endif
+ endif
+ endif
++endif
+ 
+ arch_variant_cflags += \
+     -mfloat-abi=softfp \
+-- 
+2.6.2
+
