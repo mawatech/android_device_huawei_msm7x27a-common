@@ -129,9 +129,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.qualcomm.bluetooth.ftp=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.cwm.enable_key_repeat=true
-
-PRODUCT_PROPERTY_OVERRIDES += \
     debug.composition.type=dyn \
     debug.hwc.dynThreshold=1.9 \
     persist.hwc.mdpcomp.enable=false \
@@ -181,7 +178,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     config.disable_atlas=true \
     dalvik.vm.jit.codecachesize=0 \
     persist.sys.force_highendgfx=true \
-    ro.config.max_starting_bg=8 \
+    ro.config.max_starting_bg=6 \
     ro.sys.fw.bg_apps_limit=16
     
 # FM Radio
