@@ -156,7 +156,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.call_ring.multiple=false
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp,adb \
     ro.vold.umsdirtyratio=50
 
 PRODUCT_PROPERTY_OVERRIDES += \
