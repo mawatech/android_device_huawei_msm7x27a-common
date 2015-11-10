@@ -173,7 +173,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.jit.codecachesize=0 \
     persist.sys.force_highendgfx=true \
     ro.config.max_starting_bg=6 \
-    ro.sys.fw.bg_apps_limit=16
+    ro.sys.fw.bg_apps_limit=8
     
 # FM Radio
 PRODUCT_PROPERTY_OVERRIDES += \
