@@ -1,4 +1,4 @@
-From ea7ae64cc0f46f645e9a99f89d4c464fe33e0a0e Mon Sep 17 00:00:00 2001
+From 476fce623843bb4d315db63d083f7f6e22eac9be Mon Sep 17 00:00:00 2001
 From: Kyle Harrison <khwebmail@gmail.com>
 Date: Thu, 16 Apr 2015 12:35:37 +0100
 Subject: [PATCH] msm7x27a support
@@ -10,10 +10,10 @@ Change-Id: I052b47237022f1a73293c5bbe591203be01809c2
  2 files changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/core/qcom_target.mk b/core/qcom_target.mk
-index 17c9335..e253e3a 100644
+index bbf912b..294d8dd 100644
 --- a/core/qcom_target.mk
 +++ b/core/qcom_target.mk
-@@ -26,7 +26,7 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+@@ -29,7 +29,7 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
      # Tell HALs that we're compiling an AOSP build with an in-line kernel
      TARGET_COMPILE_WITH_MSM_KERNEL := true
  
@@ -21,7 +21,7 @@ index 17c9335..e253e3a 100644
 +    ifneq ($(filter msm7x27a msm7x30 msm8660 msm8960,$(TARGET_BOARD_PLATFORM)),)
          # Enable legacy graphics functions
          qcom_flags += -DQCOM_BSP_LEGACY
-     endif
+         # Enable legacy audio functions
 diff --git a/core/qcom_utils.mk b/core/qcom_utils.mk
 index bb1202c..9e5d096 100755
 --- a/core/qcom_utils.mk
@@ -34,5 +34,5 @@ index bb1202c..9e5d096 100755
  QCOM_BOARD_PLATFORMS += msm8226
  QCOM_BOARD_PLATFORMS += msm8610
 -- 
-2.6.1
+2.6.2
 
