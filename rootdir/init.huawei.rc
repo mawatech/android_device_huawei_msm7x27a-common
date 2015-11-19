@@ -145,8 +145,9 @@ on boot
     write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
     write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 53059
 
-    # Enable UKSM
-    write /sys/kernel/mm/uksm/run 1
+    # Enable KSM
+    write /sys/kernel/mm/ksm/run 1
+    write /sys/kernel/mm/ksm/deferred_timer 1
 
     # Enable sysrq
     write /proc/sys/kernel/sysrq 1
