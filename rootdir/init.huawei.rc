@@ -266,4 +266,4 @@ service akm8975 /system/bin/akmd8975
     oneshot
 
 on property:sys.boot_completed=1
-    setprop sys.io.scheduler bfq
+    setprop sys.io.scheduler deadline
