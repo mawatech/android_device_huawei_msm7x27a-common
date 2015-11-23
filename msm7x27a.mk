@@ -175,11 +175,15 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.low_ram=true \
     config.disable_atlas=true \
-    dalvik.vm.jit.codecachesize=0 \
     persist.sys.force_highendgfx=true \
     ro.config.max_starting_bg=6 \
     ro.sys.fw.bg_apps_limit=8
-    
+
+# Strict mode
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.strictmode.visual=0 \
+    persist.sys.strictmode.disable=1
+
 # FM Radio
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.fm.analogpath.supported=false \
