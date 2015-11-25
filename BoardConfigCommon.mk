@@ -160,3 +160,5 @@ EXTENDED_FONT_FOOTPRINT := true
 
 # Enable Minikin text layout engine (will be the default soon)
 USE_MINIKIN := true
+
+BLOCK_BASED_OTA := false
