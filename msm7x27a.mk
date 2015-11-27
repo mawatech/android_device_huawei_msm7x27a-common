@@ -68,6 +68,7 @@ PRODUCT_PACKAGES +=  libstlport
 
 #wifi
 PRODUCT_PACKAGES += \
+    libcnefeatureconfig \
     libwpa_client \
     hostapd \
     dhcpcd.conf \
