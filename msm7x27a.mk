@@ -139,7 +139,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.heapgrowthlimit=52m \
-    dalvik.vm.heapsize=128m
+    dalvik.vm.heaptargetutilization=0.25
 
 PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hardware=true \
