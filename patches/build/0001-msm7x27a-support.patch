@@ -1,16 +1,16 @@
-From 476fce623843bb4d315db63d083f7f6e22eac9be Mon Sep 17 00:00:00 2001
+From 3b5966477e38df8f111379f2337800d32c81c244 Mon Sep 17 00:00:00 2001
 From: Kyle Harrison <khwebmail@gmail.com>
-Date: Thu, 16 Apr 2015 12:35:37 +0100
+Date: Thu, 3 Dec 2015 12:24:11 +0000
 Subject: [PATCH] msm7x27a support
 
-Change-Id: I052b47237022f1a73293c5bbe591203be01809c2
+Change-Id: If7e92f7ce9f003a9b2b0aee35f38be1787d360ae
 ---
  core/qcom_target.mk | 2 +-
  core/qcom_utils.mk  | 1 +
  2 files changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/core/qcom_target.mk b/core/qcom_target.mk
-index bbf912b..294d8dd 100644
+index 1b69715..0ae61fb 100644
 --- a/core/qcom_target.mk
 +++ b/core/qcom_target.mk
 @@ -29,7 +29,7 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
@@ -21,7 +21,7 @@ index bbf912b..294d8dd 100644
 +    ifneq ($(filter msm7x27a msm7x30 msm8660 msm8960,$(TARGET_BOARD_PLATFORM)),)
          # Enable legacy graphics functions
          qcom_flags += -DQCOM_BSP_LEGACY
-         # Enable legacy audio functions
+     endif
 diff --git a/core/qcom_utils.mk b/core/qcom_utils.mk
 index bb1202c..9e5d096 100755
 --- a/core/qcom_utils.mk
