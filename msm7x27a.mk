@@ -127,6 +127,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.qualcomm.bluetooth.ftp=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
+    debug.egl.recordable.rgba8888=1 \
     debug.composition.type=dyn \
     debug.hwc.dynThreshold=1.9 \
     persist.hwc.mdpcomp.enable=false \
@@ -150,12 +151,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ril.subscription.types=NV,RUIM \
     rild.libargs=-d/dev/smd0 \
-    ro.telephony.call_ring.delay=100 \
     ro.telephony.call_ring.multiple=false
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp,adb \
-    ro.vold.umsdirtyratio=50
+    ro.vold.umsdirtyratio=30
 
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=eth0 \
