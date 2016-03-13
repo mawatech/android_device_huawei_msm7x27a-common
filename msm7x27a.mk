@@ -160,8 +160,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vold.umsdirtyratio=30
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    wifi.interface=eth0 \
-    wifi.supplicant_scan_interval=60
+    wifi.interface=eth0
 
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
