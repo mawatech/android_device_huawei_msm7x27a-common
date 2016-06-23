@@ -1,4 +1,4 @@
-From fd546de4538bca8c4a4c52d82a10e53b555ee9c8 Mon Sep 17 00:00:00 2001
+From 48457637927a60a57885a87cffa2a92602c3b681 Mon Sep 17 00:00:00 2001
 From: Kyle Harrison <khwebmail@gmail.com>
 Date: Fri, 13 Feb 2015 20:16:18 +0000
 Subject: [PATCH] Select texture target based on pixel format
@@ -43,11 +43,11 @@ index c35c7be..3a63a0e 100644
      // EGLSlot contains the information and object references that
      // GLConsumer maintains about a BufferQueue buffer slot.
 diff --git a/libs/gui/Android.mk b/libs/gui/Android.mk
-index 8a965dd..be8b461 100644
+index 76aec6e..40d77ac 100644
 --- a/libs/gui/Android.mk
 +++ b/libs/gui/Android.mk
-@@ -91,6 +91,10 @@ ifeq ($(TARGET_BOARD_PLATFORM), tegra3)
- 	LOCAL_CFLAGS += -DDONT_USE_FENCE_SYNC
+@@ -95,6 +95,10 @@ ifeq ($(TARGET_NO_SENSOR_PERMISSION_CHECK),true)
+ LOCAL_CPPFLAGS += -DNO_SENSOR_PERMISSION_CHECK
  endif
  
 +ifeq ($(BOARD_ADRENO_DECIDE_TEXTURE_TARGET),true)
@@ -58,11 +58,11 @@ index 8a965dd..be8b461 100644
  
  ifeq (,$(ONE_SHOT_MAKEFILE))
 diff --git a/services/surfaceflinger/Android.mk b/services/surfaceflinger/Android.mk
-index b1fc73f..ae9e114 100644
+index 01f99ed..8d7be05 100644
 --- a/services/surfaceflinger/Android.mk
 +++ b/services/surfaceflinger/Android.mk
-@@ -89,6 +89,10 @@ else
-     LOCAL_CFLAGS += -DMAX_VIRTUAL_DISPLAY_DIMENSION=0
+@@ -98,6 +98,10 @@ ifeq ($(BOARD_USE_BGRA_8888),true)
+     LOCAL_CFLAGS += -DUSE_BGRA_8888
  endif
  
 +ifeq ($(BOARD_ADRENO_DECIDE_TEXTURE_TARGET),true)
@@ -73,10 +73,10 @@ index b1fc73f..ae9e114 100644
  LOCAL_CFLAGS += -std=c++11
  
 diff --git a/services/surfaceflinger/Layer.cpp b/services/surfaceflinger/Layer.cpp
-index bfd83e4..b0d6583 100644
+index 7b972b1..924be6c 100644
 --- a/services/surfaceflinger/Layer.cpp
 +++ b/services/surfaceflinger/Layer.cpp
-@@ -1314,8 +1314,14 @@ Region Layer::latchBuffer(bool& recomputeVisibleRegions)
+@@ -1394,8 +1394,14 @@ Region Layer::latchBuffer(bool& recomputeVisibleRegions)
              maxFrameNumber = mLastFrameNumberReceived;
          }
  
@@ -197,5 +197,5 @@ index 779e5b7..6394aae 100644
      // See GLConsumer::bindTextureImageLocked().
      status_t bindTextureImage();
 -- 
-2.6.1
+2.8.3
 
