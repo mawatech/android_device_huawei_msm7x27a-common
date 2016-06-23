@@ -1,0 +1,167 @@
+From 68939f13b7480ac793c35b8d837221b0fc8bd888 Mon Sep 17 00:00:00 2001
+From: Kyle Harrison <khwebmail@gmail.com>
+Date: Thu, 23 Jun 2016 12:21:19 +0100
+Subject: [PATCH] Add setting for vold Internal/External switchable SD
+
+Change-Id: I30a8d630d9b8b2e3bba3a28e582e6fbf54f18549
+---
+ res/values/slim_strings.xml                        |  8 ++++
+ res/xml/device_info_storage.xml                    | 10 +++++
+ .../settings/deviceinfo/StorageSettings.java       | 43 +++++++++++++++++++++-
+ 3 files changed, 60 insertions(+), 1 deletion(-)
+
+diff --git a/res/values/slim_strings.xml b/res/values/slim_strings.xml
+index 91c976a..fa76198 100644
+--- a/res/values/slim_strings.xml
++++ b/res/values/slim_strings.xml
+@@ -228,6 +228,14 @@
+     <string name="restarting_ui">Restarting UI\u2026</string>
+     <string name="lcd_density_prompt_message">Some apps may not function at non-standard dpi.\n\nThis will restart your phone.</string>
+ 
++    <!-- Vold Switchable SD -->
++    <string name="storage_switchable_title">Switchable Internal/External SD</string>	
++    <string name="storage_switch_title">Use external SD as primary</string>
++    <string name="storage_switch_summary_off">Using expanded internal storage for apps and media</string>
++    <string name="storage_switch_summary_on">Using SD Card for apps and media</string>
++    <string name="reboot_prompt_title">Reboot required</string>
++    <string name="reboot_prompt_message">In order to apply the changed configuration, a reboot is required.\n\nDo you want to reboot now?</string>
++
+     <!-- Wakeup options -->
+     <string name="display_category_wakeup_options_title">Wakeup options</string>
+     <string name="wakeup_when_plugged_unplugged_title">Wake up on charge</string>
+diff --git a/res/xml/device_info_storage.xml b/res/xml/device_info_storage.xml
+index 19c5982..3b3387a 100644
+--- a/res/xml/device_info_storage.xml
++++ b/res/xml/device_info_storage.xml
+@@ -21,6 +21,16 @@
+     settings:keywords="@string/keywords_storage">
+ 
+     <PreferenceCategory
++        android:key="storage_switchable"
++        android:title="@string/storage_switchable_title" />
++
++    <SwitchPreference
++        android:key="key_switch_storage"
++        android:title="@string/storage_switch_title"
++        android:summaryOn="@string/storage_switch_summary_on"
++        android:summaryOff="@string/storage_switch_summary_off" />
++
++    <PreferenceCategory
+         android:key="storage_internal"
+         android:title="@string/storage_internal_title" />
+ 
+diff --git a/src/com/android/settings/deviceinfo/StorageSettings.java b/src/com/android/settings/deviceinfo/StorageSettings.java
+index c36d0df..09fd33b 100644
+--- a/src/com/android/settings/deviceinfo/StorageSettings.java
++++ b/src/com/android/settings/deviceinfo/StorageSettings.java
+@@ -27,14 +27,17 @@ import android.graphics.Color;
+ import android.graphics.drawable.Drawable;
+ import android.os.AsyncTask;
+ import android.os.Bundle;
++import android.os.PowerManager;
+ import android.os.storage.DiskInfo;
+ import android.os.storage.StorageEventListener;
+ import android.os.storage.StorageManager;
+ import android.os.storage.VolumeInfo;
+ import android.os.storage.VolumeRecord;
++import android.os.SystemProperties;
+ import android.preference.Preference;
+ import android.preference.PreferenceCategory;
+ import android.preference.PreferenceScreen;
++import android.preference.SwitchPreference;
+ import android.text.TextUtils;
+ import android.text.format.Formatter;
+ import android.text.format.Formatter.BytesResult;
+@@ -76,11 +79,16 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
+ 
+     private StorageManager mStorageManager;
+ 
++    private PreferenceCategory mSwitchableCategory;
+     private PreferenceCategory mInternalCategory;
+     private PreferenceCategory mExternalCategory;
+ 
+     private StorageSummaryPreference mInternalSummary;
+ 
++    private static final String KEY_SWITCH_STORAGE = "key_switch_storage";
++    private static final String VOLD_SWITCH_PERSIST_PROP = "persist.sys.vold.switchexternal";
++    private SwitchPreference mSwitchStoragePref;
++
+     @Override
+     protected int getMetricsCategory() {
+         return MetricsLogger.DEVICEINFO_STORAGE;
+@@ -102,6 +110,9 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
+ 
+         addPreferencesFromResource(R.xml.device_info_storage);
+ 
++        mSwitchStoragePref = (SwitchPreference) findPreference(KEY_SWITCH_STORAGE);
++
++        mSwitchableCategory = (PreferenceCategory) findPreference("storage_switchable");
+         mInternalCategory = (PreferenceCategory) findPreference("storage_internal");
+         mExternalCategory = (PreferenceCategory) findPreference("storage_external");
+ 
+@@ -133,9 +144,14 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
+         final Context context = getActivity();
+ 
+         getPreferenceScreen().removeAll();
++        mSwitchableCategory.removeAll();
+         mInternalCategory.removeAll();
+         mExternalCategory.removeAll();
+ 
++        String voldswitch = SystemProperties.get(VOLD_SWITCH_PERSIST_PROP, "0");
++        mSwitchStoragePref.setChecked("1".equals(voldswitch));
++        mSwitchableCategory.addPreference(mSwitchStoragePref);
++
+         mInternalCategory.addPreference(mInternalSummary);
+ 
+         int privateCount = 0;
+@@ -215,6 +231,8 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
+                     -1, 0, args);
+             finish();
+         }
++
++        getPreferenceScreen().addPreference(mSwitchableCategory);
+     }
+ 
+     @Override
+@@ -233,7 +251,13 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
+     @Override
+     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference pref) {
+         final String key = pref.getKey();
+-        if (pref instanceof StorageVolumePreference) {
++        if(pref == mSwitchStoragePref) {
++            Log.d(TAG,"Setting persist.sys.vold.switchexternal to "+(
++                    mSwitchStoragePref.isChecked() ? "1" : "0"));
++            SystemProperties.set(VOLD_SWITCH_PERSIST_PROP,
++                    mSwitchStoragePref.isChecked() ? "1" : "0");
++            showRebootPrompt();
++        } else if (pref instanceof StorageVolumePreference) {
+             // Picked a normal volume
+             final VolumeInfo vol = mStorageManager.findVolumeById(key);
+ 
+@@ -282,6 +306,23 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
+         return false;
+     }
+ 
++    private void showRebootPrompt() {
++        AlertDialog dialog = new AlertDialog.Builder(getActivity())
++                .setTitle(R.string.reboot_prompt_title)
++                .setMessage(R.string.reboot_prompt_message)
++                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
++                    @Override
++                    public void onClick(DialogInterface dialog, int which) {
++                        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
++                        pm.reboot(null);
++                    }
++                })
++                .setNegativeButton(R.string.no, null)
++                .create();
++
++        dialog.show();
++    }
++
+     public static class MountTask extends AsyncTask<Void, Void, Exception> {
+         private final Context mContext;
+         private final StorageManager mStorageManager;
+-- 
+2.9.0
+
