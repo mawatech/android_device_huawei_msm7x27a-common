@@ -205,20 +205,17 @@
            16 - App switch
            32 - Camera
         For example, a device with Home, Back and Menu keys would set this
-        config to 7.
-    <integer name="config_deviceHardwareKeys">7</integer> -->
+        config to 7. -->
+    <integer name="config_deviceHardwareKeys">7</integer>
 
     <!-- Control the behavior when the user long presses the home button.
             0 - Nothing
-            1 - Menu key
-            2 - Recent apps view in SystemUI
-            3 - Launch assist intent
-            4 - Voice Search
-            5 - In-app Search
+            1 - Recent apps view in SystemUI
+            2 - Launch assist intent
          This needs to match the constants in
          policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
     -->
-    <integer name="config_longPressOnHomeBehavior">2</integer>
+    <integer name="config_longPressOnHomeBehavior">1</integer>
 
     <!-- The RadioAccessFamilies supported by the device.
          Empty is viewed as "all".  Only used on devices which
